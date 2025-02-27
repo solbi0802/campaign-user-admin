@@ -1,19 +1,17 @@
-/** @jsxImportSource @emotion/react */
-import MenuBar from "./components/MenuBar";
-import { css } from "@emotion/react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import User from "./pages/user";
+import MainPage from "./pages/MainPage";
+import Campaign from "./pages/campaign";
 
-const Container = css`
-  display: flex;
-  justify-content: center;
-  width: 1980px;
-`;
 function App() {
   return (
-    <>
-      <div css={Container}>
-        <MenuBar />
-      </div>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path={"/"} element={<MainPage />} />
+        <Route path="/user" element={<User />} />
+        <Route path="/campaign" element={<Campaign />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

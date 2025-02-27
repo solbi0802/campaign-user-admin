@@ -7,9 +7,8 @@ export const fetchData = async <T>(
   const isJsonBody = options.body && !(options.body instanceof FormData);
 
   try {
-    console.log("VITE_API_BASE_URL:", import.meta.env.VITE_API_BASE_URL);
-
     const response = await fetch(`${BASE_URL}${endpoint}`, {
+      method: options.method || "GET",
       headers: isJsonBody
         ? {
             "Content-Type": "application/json",

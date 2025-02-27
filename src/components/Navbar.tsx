@@ -5,10 +5,10 @@ import {
   SelectRoot,
   SelectTrigger,
   SelectValueText,
-} from "../components/ui/select";
+} from "./ui/select";
 import { createListCollection } from "@chakra-ui/react";
 
-const MenuBar = () => {
+const Navbar = () => {
   return (
     <Flex
       as="nav"
@@ -16,14 +16,23 @@ const MenuBar = () => {
       p={4}
       align="center"
       justifyContent="space-between"
-      gap="4"
-      width="100%"
-      height={"98px"}
+      gap="8"
+      width="100vw"
+      height="62px"
+      position="fixed"
+      top="0"
+      left="0"
+      zIndex="1000"
     >
       <HStack>
         <Box>
           <Link href="/" color="whiteAlpha.800">
-            Wisebirds
+            <img
+              width={40}
+              height={40}
+              src={"/logo.jpg"}
+              alt="와이즈버즈 로고"
+            />
           </Link>
         </Box>
         <Box>
@@ -63,12 +72,12 @@ const MenuBar = () => {
   );
 };
 
-export default MenuBar;
+export default Navbar;
 
 const frameworks = createListCollection({
   items: [
     { label: "어드민", value: "admin" },
     { label: "매니저", value: "manager" },
-    { label: "뷰어어", value: "viewer" },
+    { label: "뷰어", value: "viewer" },
   ],
 });

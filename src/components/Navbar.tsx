@@ -7,8 +7,25 @@ import {
   SelectValueText,
 } from "./ui/select";
 import { createListCollection } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { fetchData } from "../api";
+import User from "../types/index";
 
 const Navbar = () => {
+  const [user, setUser] = useState<User>();
+  const getMyInfo = async () => {
+    try {
+      const res = await fetchData("/api/auth/me");
+      setUser(res as User);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getMyInfo();
+  }, []);
+
   return (
     <Flex
       as="nav"
@@ -47,7 +64,9 @@ const Navbar = () => {
         </Box>
       </HStack>
       <HStack>
-        <Box>사용자 이메일</Box>
+        <Box>
+          <p>{user?.email}</p>
+        </Box>
         <Box>
           <SelectRoot
             collection={frameworks}

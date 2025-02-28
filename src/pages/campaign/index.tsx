@@ -11,6 +11,16 @@ import {
 import { formatNumberWithCommas, formatPercentage } from "../../utils";
 import Campaign from "../../types";
 
+const conversionTextMap: Record<string, string> = {
+  WEBSITE_CONVERSIONS: "웹사이트 전환",
+  WEBSITE_TRAFFIC: "웹사이트 트래픽",
+  SALES: "판매",
+  APP_INSTALLATION: "앱설치",
+  LEAD: "리드",
+  BRAND: "브랜드 인지도 및 도달 범위",
+  VIDEO_VIEWS: "동영상 조회",
+};
+
 const CampaignList = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>();
   const [totalCount, setTotalCount] = useState(0);
@@ -43,7 +53,7 @@ const CampaignList = () => {
           <Table.Root size="lg" stickyHeader>
             <Table.Header>
               <Table.Row bg="bg.subtle">
-                <Table.ColumnHeader>상태</Table.ColumnHeader>
+                <Table.ColumnHeader textAlign="center">상태</Table.ColumnHeader>
                 <Table.ColumnHeader>캠페인명</Table.ColumnHeader>
                 <Table.ColumnHeader>캠페인 목적</Table.ColumnHeader>
                 <Table.ColumnHeader textAlign="end">노출수</Table.ColumnHeader>
@@ -59,7 +69,7 @@ const CampaignList = () => {
             <Table.Body>
               {paginatedCampaigns?.map((item) => (
                 <Table.Row key={item.id}>
-                  <Table.Cell>
+                  <Table.Cell textAlign="center">
                     <Switch.Root colorPalette="blue">
                       <Switch.HiddenInput />
                       <Switch.Control>
@@ -70,7 +80,9 @@ const CampaignList = () => {
                     {item.enabled}
                   </Table.Cell>
                   <Table.Cell>{item.name}</Table.Cell>
-                  <Table.Cell>{item.campaign_objective}</Table.Cell>
+                  <Table.Cell>
+                    {conversionTextMap[item.campaign_objective]}
+                  </Table.Cell>
                   <Table.Cell textAlign="end">
                     {formatNumberWithCommas(item.impressions)}
                   </Table.Cell>
@@ -94,7 +106,7 @@ const CampaignList = () => {
         {campaigns && (
           <PaginationRoot
             count={totalCount}
-            pageSize={10}
+            pageSize={pageSize}
             page={page}
             defaultPage={1}
             onPageChange={(e) => setPage(e.page)}

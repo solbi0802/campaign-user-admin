@@ -20,10 +20,12 @@ import { useEffect, useState } from "react";
 import { fetchData } from "../api";
 import User from "../types/index";
 import styled from "@emotion/styled";
+import { roleState } from "../state";
+import { useRecoilState } from "recoil";
 
 const Navbar = () => {
   const [user, setUser] = useState<User>();
-  const [role, setRole] = useState<string[]>(["admin"]);
+  const [role, setRole] = useRecoilState(roleState);
 
   const getMyInfo = async () => {
     try {
@@ -38,16 +40,8 @@ const Navbar = () => {
     getMyInfo();
   }, []);
 
-  useEffect(() => {
-    const savedRole = localStorage.getItem("role");
-    if (savedRole) {
-      setRole(JSON.parse(savedRole));
-    }
-  }, []);
-
   const handleRoleChange = (value: string[]) => {
     setRole(value);
-    localStorage.setItem("role", JSON.stringify(value));
   };
 
   const isAdmin = role.includes("admin");

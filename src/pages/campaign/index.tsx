@@ -10,6 +10,8 @@ import {
 } from "../../components/ui/pagination";
 import { formatNumberWithCommas, formatPercentage } from "../../utils";
 import Campaign from "../../types";
+import { roleState } from "../../state";
+import { useRecoilValue } from "recoil";
 
 const conversionTextMap: Record<string, string> = {
   WEBSITE_CONVERSIONS: "웹사이트 전환",
@@ -25,6 +27,7 @@ const CampaignList = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>();
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
+  const role = useRecoilValue(roleState);
 
   const getCampaignList = async () => {
     try {
@@ -70,7 +73,10 @@ const CampaignList = () => {
               {paginatedCampaigns?.map((item) => (
                 <Table.Row key={item.id}>
                   <Table.Cell textAlign="center">
-                    <Switch.Root colorPalette="blue">
+                    <Switch.Root
+                      colorPalette="blue"
+                      disabled={role.includes("viewer")}
+                    >
                       <Switch.HiddenInput />
                       <Switch.Control>
                         <Switch.Thumb />

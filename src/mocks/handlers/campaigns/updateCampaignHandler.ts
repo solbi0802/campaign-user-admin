@@ -20,7 +20,7 @@ export const updateCampaignHandler = http.patch(
       return HttpResponse.json({
         result: true,
         id: campaign.id,
-        enabled: campaign.enabled,
+        enabled: campaign.enabled, // 토글버튼 실행시 데이터 변경되는 지 체크하기 위해 추가
       });
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: unknown) {

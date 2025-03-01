@@ -29,9 +29,9 @@ const CampaignList = () => {
   const [page, setPage] = useState(1);
   const role = useRecoilValue(roleState);
 
-  const getCampaignList = async () => {
+  const getCampaignList = async (page: number) => {
     try {
-      const res: Campaign = await fetchData("/api/campaigns");
+      const res: Campaign = await fetchData(`/api/campaigns?page=${page}`);
       setCampaigns(res.content);
       setTotalCount(res.size);
     } catch (error) {
@@ -39,7 +39,7 @@ const CampaignList = () => {
     }
   };
   useEffect(() => {
-    getCampaignList();
+    getCampaignList(page);
   }, [page]);
 
   const handleToggleSwitch = async (campaignId: number, checked: boolean) => {

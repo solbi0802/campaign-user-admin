@@ -4,9 +4,10 @@ import { Users } from "../db/models/User";
 // PATCH /api/users/{id}
 export const updateUserhandler = http.patch(
   "/api/users/:id",
-  async ({ params }) => {
-    const { id } = params;
-    const userId = Number(id);
+  async ({ request }) => {
+    // URL에서 id 값을 추출하기
+    const match = request.url.match(/\/api\/users\/(\d+)/);
+    const userId = match ? match[1] : 1;
 
     const user = Users.content.find(
       (user: { id: number }) => user.id === Number(userId)

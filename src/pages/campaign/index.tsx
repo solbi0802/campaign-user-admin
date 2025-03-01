@@ -42,6 +42,31 @@ const CampaignList = () => {
     getCampaignList();
   }, [page]);
 
+  const handleToggleSwitch = async (campaignId: number, checked: boolean) => {
+    try {
+      const response = await fetch(`/api/campaigns/${campaignId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ enabled: checked }),
+      });
+      const data = await response.json();
+
+      if (data.result) {
+        setCampaigns((prev) =>
+          prev?.map((campaign) =>
+            campaign.id === campaignId
+              ? { ...campaign, enabled: checked }
+              : campaign
+          )
+        );
+      } else {
+        console.error("캠페인 업데이트 실패");
+      }
+    } catch (error) {
+      console.error("캠페인 수정 API 호출 중 오류 발생:", error);
+    }
+  };
+
   const pageSize = 25;
   const paginatedCampaigns: Campaign[] | undefined = campaigns?.slice(
     (page - 1) * pageSize,
@@ -76,6 +101,10 @@ const CampaignList = () => {
                     <Switch.Root
                       colorPalette="blue"
                       disabled={role.includes("viewer")}
+                      checked={item.enabled}
+                      onCheckedChange={({ checked }) =>
+                        handleToggleSwitch(item.id, checked)
+                      }
                     >
                       <Switch.HiddenInput />
                       <Switch.Control>
@@ -83,7 +112,6 @@ const CampaignList = () => {
                       </Switch.Control>
                       <Switch.Label />
                     </Switch.Root>
-                    {item.enabled}
                   </Table.Cell>
                   <Table.Cell>{item.name}</Table.Cell>
                   <Table.Cell>

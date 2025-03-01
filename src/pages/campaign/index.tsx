@@ -1,5 +1,5 @@
 import { fetchData } from "../../api";
-import { HStack, Stack, Table, Switch } from "@chakra-ui/react";
+import { HStack, Stack, Switch } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { useState, useEffect } from "react";
 import {
@@ -12,6 +12,7 @@ import { formatNumberWithCommas, formatPercentage } from "../../utils";
 import Campaign from "../../types";
 import { roleState } from "../../state";
 import { useRecoilValue } from "recoil";
+import CommonTable from "../../components/CommonTable";
 
 const conversionTextMap: Record<string, string> = {
   WEBSITE_CONVERSIONS: "웹사이트 전환",
@@ -24,7 +25,7 @@ const conversionTextMap: Record<string, string> = {
 };
 
 const CampaignList = () => {
-  const [campaigns, setCampaigns] = useState<Campaign[]>();
+  const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
   const role = useRecoilValue(roleState);
@@ -68,75 +69,72 @@ const CampaignList = () => {
   };
 
   const pageSize = 25;
-  const paginatedCampaigns: Campaign[] | undefined = campaigns?.slice(
-    (page - 1) * pageSize,
-    page * pageSize
-  );
+
+  const columns = [
+    {
+      key: "enabled",
+      header: "상태",
+      textAlign: "center",
+      renderCell: (item: any) => (
+        <Switch.Root
+          colorPalette="blue"
+          disabled={role.includes("viewer")}
+          checked={item.enabled}
+          onCheckedChange={({ checked }) =>
+            handleToggleSwitch(item.id, checked)
+          }
+        >
+          <Switch.HiddenInput />
+          <Switch.Control>
+            <Switch.Thumb />
+          </Switch.Control>
+          <Switch.Label />
+        </Switch.Root>
+      ),
+    },
+    { key: "name", header: "캠페인명" },
+    {
+      key: "campaign_objective",
+      header: "캠페인 목적",
+      renderCell: (item: any) => conversionTextMap[item.campaign_objective],
+    },
+    {
+      key: "impressions",
+      header: "노출수",
+      textAlign: "end",
+      renderCell: (item: any) => formatNumberWithCommas(item.impressions),
+    },
+    {
+      key: "clicks",
+      header: "클릭수",
+      textAlign: "end",
+      renderCell: (item: any) => formatNumberWithCommas(item.clicks),
+    },
+    {
+      key: "ctr",
+      header: "CTR",
+      textAlign: "end",
+      renderCell: (item: any) => formatPercentage(item.ctr),
+    },
+    {
+      key: "video_views",
+      header: "동영상조회수",
+      textAlign: "end",
+      renderCell: (item: any) => formatNumberWithCommas(item.video_views),
+    },
+    {
+      key: "vtr",
+      header: "VTR",
+      textAlign: "end",
+      renderCell: (item: any) => formatPercentage(item.vtr),
+    },
+  ];
 
   return (
     <>
       <CampaignTitle> 캠페인 관리</CampaignTitle>
-      <Stack width="full" gap="5">
-        <Table.ScrollArea borderWidth="1px" height="100vh" width="100vw">
-          <Table.Root size="lg" stickyHeader>
-            <Table.Header>
-              <Table.Row bg="bg.subtle">
-                <Table.ColumnHeader textAlign="center">상태</Table.ColumnHeader>
-                <Table.ColumnHeader>캠페인명</Table.ColumnHeader>
-                <Table.ColumnHeader>캠페인 목적</Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="end">노출수</Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="end">클릭수</Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="end">CTR</Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="end">
-                  동영상조회수
-                </Table.ColumnHeader>
-                <Table.ColumnHeader textAlign="end">VTR</Table.ColumnHeader>
-              </Table.Row>
-            </Table.Header>
-
-            <Table.Body>
-              {paginatedCampaigns?.map((item) => (
-                <Table.Row key={item.id}>
-                  <Table.Cell textAlign="center">
-                    <Switch.Root
-                      colorPalette="blue"
-                      disabled={role.includes("viewer")}
-                      checked={item.enabled}
-                      onCheckedChange={({ checked }) =>
-                        handleToggleSwitch(item.id, checked)
-                      }
-                    >
-                      <Switch.HiddenInput />
-                      <Switch.Control>
-                        <Switch.Thumb />
-                      </Switch.Control>
-                      <Switch.Label />
-                    </Switch.Root>
-                  </Table.Cell>
-                  <Table.Cell>{item.name}</Table.Cell>
-                  <Table.Cell>
-                    {conversionTextMap[item.campaign_objective]}
-                  </Table.Cell>
-                  <Table.Cell textAlign="end">
-                    {formatNumberWithCommas(item.impressions)}
-                  </Table.Cell>
-                  <Table.Cell textAlign="end">
-                    {formatNumberWithCommas(item.clicks)}
-                  </Table.Cell>
-                  <Table.Cell textAlign="end">
-                    {formatPercentage(item.ctr)}
-                  </Table.Cell>
-                  <Table.Cell textAlign="end">
-                    {formatNumberWithCommas(item.video_views)}
-                  </Table.Cell>
-                  <Table.Cell textAlign="end">
-                    {formatPercentage(item.vtr)}
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table.Root>
-        </Table.ScrollArea>
+      <Stack width={"100vw"} gap="5">
+        <CommonTable columns={columns} data={campaigns} />
         {campaigns && (
           <PaginationRoot
             count={totalCount}
@@ -145,7 +143,7 @@ const CampaignList = () => {
             defaultPage={1}
             onPageChange={(e) => setPage(e.page)}
           >
-            <HStack wrap="wrap">
+            <HStack wrap="wrap" justifyContent={"center"}>
               <PaginationPrevTrigger />
               <PaginationItems />
               <PaginationNextTrigger />

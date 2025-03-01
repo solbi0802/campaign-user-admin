@@ -1,13 +1,4 @@
-import {
-  Box,
-  Flex,
-  HStack,
-  Link,
-  PopoverBody,
-  PopoverContent,
-  PopoverRoot,
-  PopoverTrigger,
-} from "@chakra-ui/react";
+import { Box, Flex, HStack, Link } from "@chakra-ui/react";
 import {
   SelectContent,
   SelectItem,
@@ -19,14 +10,9 @@ import { createListCollection } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { fetchData } from "../api";
 import User from "../types/index";
-import styled from "@emotion/styled";
-import { roleState } from "../state";
-import { useRecoilState } from "recoil";
 
 const Navbar = () => {
   const [user, setUser] = useState<User>();
-  const [role, setRole] = useRecoilState(roleState);
-
   const getMyInfo = async () => {
     try {
       const res = await fetchData("/api/auth/me");
@@ -39,12 +25,6 @@ const Navbar = () => {
   useEffect(() => {
     getMyInfo();
   }, []);
-
-  const handleRoleChange = (value: string[]) => {
-    setRole(value);
-  };
-
-  const isAdmin = role.includes("admin");
 
   return (
     <Flex
@@ -77,61 +57,30 @@ const Navbar = () => {
             캠페인
           </Link>
         </Box>
-        {isAdmin && (
-          <Box>
-            <Link href="/user" color="whiteAlpha.800">
-              사용자
-            </Link>
-          </Box>
-        )}
+        <Box>
+          <Link href="/user" color="whiteAlpha.800">
+            사용자
+          </Link>
+        </Box>
       </HStack>
       <HStack>
         <Box>
-          <PopoverRoot positioning={{ placement: "bottom-end" }}>
-            <PopoverTrigger backgroundColor={"blue.500"} border={"none"}>
-              <p>{user?.email}</p>
-            </PopoverTrigger>
-            <PopoverContent
-              zIndex="1001"
-              backgroundColor={"white"}
-              color={"black"}
-              border={"none"}
-            >
-              <PopoverBody>
-                <div>
-                  <p>{user?.name}</p>
-                  <p>{user?.email}</p>
-                  <p>{user?.company?.name}</p>
-                </div>
-              </PopoverBody>
-            </PopoverContent>
-          </PopoverRoot>
+          <p>{user?.email}</p>
         </Box>
         <Box>
           <SelectRoot
             collection={frameworks}
             size="sm"
             width="320px"
-            value={role}
-            onValueChange={(e) => handleRoleChange(e.value)}
+            bgColor={"blue.500"}
           >
-            <CustomSelectTrigger>
-              <SelectValueText placeholder={role[0]} />
-            </CustomSelectTrigger>
-            <SelectContent
-              bgColor="white"
-              color="black"
-              border="1px solid gray"
-            >
-              {frameworks.items.map((roleItem) => (
-                <SelectItem
-                  item={roleItem}
-                  key={roleItem.value}
-                  bgColor="white"
-                  color="black"
-                  _hover={{ bg: "gray.200" }}
-                >
-                  {roleItem.label}
+            <SelectTrigger>
+              <SelectValueText placeholder="어드민" />
+            </SelectTrigger>
+            <SelectContent>
+              {frameworks.items.map((movie) => (
+                <SelectItem item={movie} key={movie.value}>
+                  {movie.label}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -151,20 +100,3 @@ const frameworks = createListCollection({
     { label: "뷰어", value: "viewer" },
   ],
 });
-
-const CustomSelectTrigger = styled(SelectTrigger)`
-  background-color: white;
-  color: black;
-  border: none;
-  border: 1px solid gray;
-  border-radius: 16px;
-
-  & button {
-    background-color: white;
-    color: black;
-    &:focus {
-      outline: none;
-      border: none;
-    }
-  }
-`;

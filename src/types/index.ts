@@ -27,18 +27,6 @@ export default interface UserResponse {
   empty: boolean;
 }
 
-export default interface Campaign {
-  id: number;
-  name: string;
-  enabled: boolean;
-  campaign_objective: string;
-  impressions: number;
-  clicks: number;
-  ctr: number;
-  video_views: number;
-  vtr: number;
-}
-
 export default interface CampaignResponse {
   content: [];
   id: number;

@@ -4,27 +4,23 @@ import MainPage from "./pages/MainPage";
 import Campaign from "./pages/campaign";
 import DefaultLayout from "./pages/DefaultLayout";
 import PrivateRoute from "./pages/PrivateRoute";
-import { useState } from "react";
+import { RecoilRoot } from "recoil";
 
 function App() {
-  const [userRoles] = useState<string[]>(() => {
-    const savedRoles = localStorage.getItem("role");
-    return savedRoles ? JSON.parse(savedRoles) : [];
-  });
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path={"/"} element={<DefaultLayout />}>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/campaign" element={<Campaign />} />
-          <Route
-            element={<PrivateRoute roles={["admin"]} userRoles={userRoles} />}
-          >
-            <Route path="/user" element={<User />} />
+    <RecoilRoot>
+      <BrowserRouter>
+        <Routes>
+          <Route path={"/"} element={<DefaultLayout />}>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/campaign" element={<Campaign />} />
+            <Route element={<PrivateRoute roles={["admin"]} />}>
+              <Route path="/user" element={<User />} />
+            </Route>
           </Route>
-        </Route>
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
+    </RecoilRoot>
   );
 }
 

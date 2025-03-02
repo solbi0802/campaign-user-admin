@@ -3,7 +3,13 @@ import { Button, Field, HStack, Stack, Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import User from "../../types";
 import { fetchData } from "../../api";
-import { formatDate } from "../../utils";
+import {
+  formatDate,
+  validateConfirmPassword,
+  validateEmail,
+  validatePassword,
+  validateUserName,
+} from "../../utils";
 import { Link } from "@chakra-ui/react";
 import {
   PaginationItems,
@@ -21,6 +27,15 @@ const UserList = () => {
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
+  const [email, setEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [userName, setUserName] = useState("");
+  const [userNameError, setUserNameError] = useState("");
+
   const getUserList = async (page: number) => {
     try {
       const res: User = await fetchData(`/api/users?page=${page}`);
@@ -33,6 +48,33 @@ const UserList = () => {
   useEffect(() => {
     getUserList(page);
   }, [page]);
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPassword(value);
+    setPasswordError(validatePassword(value));
+  };
+
+  const handleConfirmPasswordChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const value = e.target.value;
+    setConfirmPassword(value);
+    setConfirmPasswordError(validateConfirmPassword(password, value));
+  };
+
+  const handleUserNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setUserName(value);
+    setUserNameError(validateUserName(value));
+  };
+
+  const handleEmailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setEmail(value);
+    const errorMessage = await validateEmail(value);
+    setEmailError(errorMessage);
+  };
 
   const columns = [
     { key: "email", header: "아이디" },
@@ -59,15 +101,15 @@ const UserList = () => {
           triggerChild={<Button colorPalette="blue">생성</Button>}
           body={
             <Stack gap="4" css={{ "--field-label-width": "96px" }}>
-              <Field.Root required invalid={false}>
+              <Field.Root required invalid={!!emailError}>
                 <HStack>
                   <Field.Label>아이디</Field.Label>
                   <Field.RequiredIndicator />
                 </HStack>
-                <Input />
-                <Field.ErrorText>This is an error text</Field.ErrorText>
+                <Input value={email} onChange={handleEmailChange} />
+                {emailError && <Field.ErrorText>{emailError}</Field.ErrorText>}
               </Field.Root>
-              <Field.Root required>
+              <Field.Root required invalid={!!passwordError}>
                 <HStack>
                   <Field.Label>비밀번호</Field.Label>
                   <Field.RequiredIndicator />
@@ -75,23 +117,35 @@ const UserList = () => {
 
                 <PasswordInput
                   placeholder="영문,숫자,특수문자 조합 8~15자"
-                  size="md"
+                  value={password}
+                  onChange={handlePasswordChange}
                 />
-                <Field.ErrorText>This is an error text</Field.ErrorText>
+                {passwordError && (
+                  <Field.ErrorText>{passwordError}</Field.ErrorText>
+                )}
               </Field.Root>
-              <Field.Root required>
+              <Field.Root required invalid={!!confirmPasswordError}>
                 <HStack>
                   <Field.Label>비밀번호 확인</Field.Label>
                   <Field.RequiredIndicator />
                 </HStack>
-                <PasswordInput size="md" />
+                <PasswordInput
+                  value={confirmPassword}
+                  onChange={handleConfirmPasswordChange}
+                />
+                {confirmPasswordError && (
+                  <Field.ErrorText>{confirmPasswordError}</Field.ErrorText>
+                )}
               </Field.Root>
-              <Field.Root required>
+              <Field.Root required invalid={!!userNameError}>
                 <HStack>
                   <Field.Label>이름</Field.Label>
                   <Field.RequiredIndicator />
                 </HStack>
-                <Input />
+                <Input value={userName} onChange={handleUserNameChange} />
+                {userNameError && (
+                  <Field.ErrorText>{userNameError}</Field.ErrorText>
+                )}
               </Field.Root>
             </Stack>
           }

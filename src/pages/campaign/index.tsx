@@ -11,7 +11,7 @@ import { formatNumberWithCommas, formatPercentage } from "../../utils";
 import Campaign from "../../types";
 import { roleState } from "../../state";
 import { useRecoilValue } from "recoil";
-import CommonTable from "../../components/CommonTable";
+import CommonTable from "../../components/common/CommonTable";
 import { Title } from "../../styles/CommonStyle";
 
 const conversionTextMap: Record<string, string> = {

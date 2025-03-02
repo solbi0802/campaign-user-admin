@@ -1,5 +1,5 @@
-import CommonTable from "../../components/CommonTable";
-import { Button, HStack, Stack } from "@chakra-ui/react";
+import CommonTable from "../../components/common/CommonTable";
+import { Button, Field, HStack, Stack, Input } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import User from "../../types";
 import { fetchData } from "../../api";
@@ -12,6 +12,8 @@ import {
   PaginationRoot,
 } from "../../components/ui/pagination";
 import { Title } from "../../styles/CommonStyle";
+import { PasswordInput } from "../../components/ui/password-input";
+import Dialog from "../../components/common/Modal";
 
 const UserList = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -51,15 +53,54 @@ const UserList = () => {
     <>
       <Title> 사용자 관리</Title>
       <HStack marginTop="4" marginLeft="4">
-        <Button
-          size="sm"
-          colorPalette="blue"
-          onClick={() => {
-            console.log("TODO: 사용자 생성 모달");
-          }}
-        >
-          생성
-        </Button>
+        <Dialog
+          title={"사용자 생성"}
+          triggerChild={<Button colorPalette="blue">생성</Button>}
+          body={
+            <Stack gap="4" css={{ "--field-label-width": "96px" }}>
+              <Field.Root required invalid={false}>
+                <HStack>
+                  <Field.Label>아이디</Field.Label>
+                  <Field.RequiredIndicator />
+                </HStack>
+                <Input />
+                <Field.ErrorText>This is an error text</Field.ErrorText>
+              </Field.Root>
+              <Field.Root required>
+                <HStack>
+                  <Field.Label>비밀번호</Field.Label>
+                  <Field.RequiredIndicator />
+                </HStack>
+
+                <PasswordInput
+                  placeholder="영문,숫자,특수문자 조합 8~15자"
+                  size="md"
+                />
+                <Field.ErrorText>This is an error text</Field.ErrorText>
+              </Field.Root>
+              <Field.Root required>
+                <HStack>
+                  <Field.Label>비밀번호 확인</Field.Label>
+                  <Field.RequiredIndicator />
+                </HStack>
+                <PasswordInput size="md" />
+              </Field.Root>
+              <Field.Root required>
+                <HStack>
+                  <Field.Label>이름</Field.Label>
+                  <Field.RequiredIndicator />
+                </HStack>
+                <Input />
+              </Field.Root>
+            </Stack>
+          }
+          footer={
+            <>
+              <Button colorPalette="gray">취소</Button>
+              <Button colorPalette="blue">생성</Button>
+            </>
+          }
+        />
       </HStack>
       <Stack width={"100vw"} gap="5" marginTop="8">
         <CommonTable columns={columns} data={users} />

@@ -1,5 +1,5 @@
 import CommonTable from "../../components/CommonTable";
-import { HStack, Stack } from "@chakra-ui/react";
+import { Button, HStack, Stack } from "@chakra-ui/react";
 import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import User from "../../types";
@@ -49,8 +49,19 @@ const UserList = () => {
   const pageSize = 25;
   return (
     <>
-      <UserTitle> 사용자 리스트</UserTitle>
-      <Stack width={"100vw"} gap="5">
+      <UserTitle> 사용자 관리</UserTitle>
+      <HStack marginTop="4" marginLeft="4">
+        <Button
+          size="sm"
+          colorPalette="blue"
+          onClick={() => {
+            console.log("TODO: 사용자 생성 모달");
+          }}
+        >
+          생성
+        </Button>
+      </HStack>
+      <Stack width={"100vw"} gap="5" marginTop="8">
         <CommonTable columns={columns} data={users} />
         {users && (
           <PaginationRoot
@@ -73,11 +84,11 @@ const UserList = () => {
 };
 
 const UserTitle = styled.h3`
-  color: black;
+  color: #000000;
   font-size: 18px;
   margin-top: 12px;
   padding: 12px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid #dbdee2;
   font-weight: bold;
 `;
 

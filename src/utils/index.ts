@@ -41,16 +41,17 @@ export const validateEmail = async (email: string): Promise<string> => {
   }
 
   try {
-    const response: Response = await fetchData(`/api/users/${email}/exists`);
-    const data = await response.json();
-    console.log("===email", data);
+    const response: { result: boolean } = await fetchData(
+      `/api/users/${email}/exists`
+    );
+    const data = await response;
     if (!data.result) {
       return "이미 사용중인 이메일입니다. 다른 이메일을 입력하세요.";
     }
   } catch (error) {
     console.error("이메일 중복 체크 API 호출 실패", error);
+    return "이미 사용중인 이메일입니다. 다른 이메일을 입력하세요.";
   }
-
   return "";
 };
 

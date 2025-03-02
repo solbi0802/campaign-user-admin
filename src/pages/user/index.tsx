@@ -1,6 +1,5 @@
 import CommonTable from "../../components/CommonTable";
 import { Button, HStack, Stack } from "@chakra-ui/react";
-import styled from "@emotion/styled";
 import { useEffect, useState } from "react";
 import User from "../../types";
 import { fetchData } from "../../api";
@@ -12,6 +11,7 @@ import {
   PaginationPrevTrigger,
   PaginationRoot,
 } from "../../components/ui/pagination";
+import { Title } from "../../styles/CommonStyle";
 
 const UserList = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -49,7 +49,7 @@ const UserList = () => {
   const pageSize = 25;
   return (
     <>
-      <UserTitle> 사용자 관리</UserTitle>
+      <Title> 사용자 관리</Title>
       <HStack marginTop="4" marginLeft="4">
         <Button
           size="sm"
@@ -82,14 +82,4 @@ const UserList = () => {
     </>
   );
 };
-
-const UserTitle = styled.h3`
-  color: #000000;
-  font-size: 18px;
-  margin-top: 12px;
-  padding: 12px;
-  border-bottom: 1px solid #dbdee2;
-  font-weight: bold;
-`;
-
 export default UserList;

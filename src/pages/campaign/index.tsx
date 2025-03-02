@@ -1,6 +1,5 @@
 import { fetchData } from "../../api";
 import { HStack, Stack, Switch } from "@chakra-ui/react";
-import styled from "@emotion/styled";
 import { useState, useEffect } from "react";
 import {
   PaginationItems,
@@ -13,6 +12,7 @@ import Campaign from "../../types";
 import { roleState } from "../../state";
 import { useRecoilValue } from "recoil";
 import CommonTable from "../../components/CommonTable";
+import { Title } from "../../styles/CommonStyle";
 
 const conversionTextMap: Record<string, string> = {
   WEBSITE_CONVERSIONS: "웹사이트 전환",
@@ -132,7 +132,7 @@ const CampaignList = () => {
 
   return (
     <>
-      <CampaignTitle> 캠페인 관리</CampaignTitle>
+      <Title> 캠페인 관리</Title>
       <Stack width={"100vw"} gap="5">
         <CommonTable columns={columns} data={campaigns} />
         {campaigns && (
@@ -156,11 +156,3 @@ const CampaignList = () => {
 };
 
 export default CampaignList;
-
-const CampaignTitle = styled.h3`
-  color: black;
-  font-size: 18px;
-  margin-top: 12px;
-  padding: 12px;
-  font-weight: bold;
-`;

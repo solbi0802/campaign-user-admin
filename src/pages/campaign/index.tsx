@@ -162,4 +162,5 @@ const CampaignTitle = styled.h3`
   font-size: 18px;
   margin-top: 12px;
   padding: 12px;
+  font-weight: bold;
 `;

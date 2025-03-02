@@ -14,6 +14,7 @@ import {
 import { Title } from "../../styles/CommonStyle";
 import { PasswordInput } from "../../components/ui/password-input";
 import Dialog from "../../components/common/Modal";
+import { DialogActionTrigger } from "../../components/ui/dialog";
 
 const UserList = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -96,7 +97,9 @@ const UserList = () => {
           }
           footer={
             <>
-              <Button colorPalette="gray">취소</Button>
+              <DialogActionTrigger asChild>
+                <Button colorPalette="gray">취소</Button>
+              </DialogActionTrigger>
               <Button colorPalette="blue">생성</Button>
             </>
           }

@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import {
-  DialogActionTrigger,
   DialogBody,
   DialogCloseTrigger,
   DialogContent,
@@ -33,13 +32,13 @@ const Modal = ({
       <DialogTrigger asChild>{triggerChild}</DialogTrigger>
       <DialogContent>
         <DialogCloseTrigger />
-        <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
-        </DialogHeader>
+        {title && (
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+          </DialogHeader>
+        )}
         <DialogBody pb="4">{body}</DialogBody>
-        <DialogFooter>
-          <DialogActionTrigger asChild>{footer}</DialogActionTrigger>
-        </DialogFooter>
+        <DialogFooter>{footer}</DialogFooter>
       </DialogContent>
     </DialogRoot>
   );

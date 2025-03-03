@@ -19,7 +19,7 @@ enableMocking().then(() => {
   createRoot(document.getElementById("root")!).render(
     <StrictMode>
       <Provider>
-        <Suspense>
+        <Suspense fallback={<h3>loading...</h3>}>
           <App />
         </Suspense>
       </Provider>

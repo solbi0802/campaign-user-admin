@@ -18,7 +18,7 @@ export const updateUserhandler = http.patch(
 
     return HttpResponse.json({
       result: true,
-      id: user?.id,
+      id: userId,
     });
   }
 );

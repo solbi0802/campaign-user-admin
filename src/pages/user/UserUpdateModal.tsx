@@ -90,7 +90,11 @@ const UserUpdateModal = ({
       }
       footer={
         <>
-          <Button colorPalette="gray" variant={"outline"} onClick={onClose}>
+          <Button
+            backgroundColor={"gray.400"}
+            variant={"outline"}
+            onClick={onClose}
+          >
             취소
           </Button>
           <Button

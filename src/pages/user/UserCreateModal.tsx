@@ -54,8 +54,8 @@ const UserCreateModal = ({
     <Dialog
       title="사용자 생성"
       triggerChild={<Button colorPalette="blue">생성</Button>}
-      isOpen={isOpen} // 모달 상태 전달
-      onClose={onClose} // 모달 닫기 핸들러 전달
+      isOpen={isOpen}
+      onClose={onClose}
       body={
         <Stack gap="4">
           <Field.Root required invalid={!!state.emailError}>
@@ -115,20 +115,26 @@ const UserCreateModal = ({
       }
       footer={
         <>
-          <Button colorPalette="gray" onClick={onClose}>
+          <Button
+            colorPalette="gray"
+            variant={"outline"}
+            onClick={onClose}
+            color={"gray"}
+          >
             취소
           </Button>
           <Button
             colorPalette="blue"
             onClick={handleSubmit}
             disabled={isSubmitting}
+            loading={isSubmitting}
+            loadingText="생성 중..."
           >
-            {isSubmitting ? "생성 중..." : "생성"}
+            생성
           </Button>
         </>
       }
     />
   );
 };
-
 export default UserCreateModal;

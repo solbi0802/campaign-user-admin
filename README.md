@@ -1,50 +1,36 @@
-# React + TypeScript + Vite
+## 실행 방법 (로컬)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+1. 레포지토리 clone
 
-Currently, two official plugins are available:
+   ```
+   git clone https://github.com/solbi0802/campaign-user-admin.git
+   ```
+2. npm 설치
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+   ```
+   npm install
+   ```
+3. 로컬에서 실행
 
-## Expanding the ESLint configuration
+   ```
+   npm run dev
+   ```
+4. http://localhost:5137 접속
+   
+## 개발 환경
+- React, Typescript, Vite, React Router (라우팅 처리)
+- 상태 관리: Recoil
+- Mock API 구현: [MSW(Mock Service Worker)](https://mswjs.io/)
+- UI 라이브러리: [Chakra UI](https://chakra-ui.com)
+- 스타일 관리: [emotion](https://emotion.sh/docs/introduction)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 기능 구현
+- [x] GNB
+- [x] 캠페인 관리
+- [x] 사용자 관리
+- [x] 사용자 관리 > 생성
+- [x] 사용자 관리 > 수정
+- [x] 에러 발생시 처리
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## 개발시 고려한 사항
+- 

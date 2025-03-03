@@ -5,9 +5,12 @@ import Campaign from "./pages/campaign";
 import DefaultLayout from "./pages/DefaultLayout";
 import { RecoilRoot } from "recoil";
 
+import ErrorAlert from "./components/common/ErrorAlert.tsx";
+
 function App() {
   return (
     <RecoilRoot>
+      <ErrorAlert />
       <BrowserRouter>
         <Routes>
           <Route path={"/"} element={<DefaultLayout />}>

@@ -9,8 +9,8 @@ import {
 } from "../../components/ui/pagination";
 import { formatNumberWithCommas, formatPercentage } from "../../utils";
 import Campaign from "../../types";
-import { roleState } from "../../state";
-import { useRecoilValue } from "recoil";
+import { errorState, roleState } from "../../state";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import CommonTable from "../../components/common/CommonTable";
 import { Title } from "../../styles/CommonStyle";
 
@@ -28,6 +28,7 @@ const CampaignList = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
+  const setErrorMessages = useSetRecoilState(errorState);
   const role = useRecoilValue(roleState);
 
   const getCampaignList = async (page: number) => {
@@ -37,6 +38,7 @@ const CampaignList = () => {
       setTotalCount(res.size);
     } catch (error) {
       console.error(error);
+      setErrorMessages(["캠페인 리스트 불러오기를 실패했습니다."]);
     }
   };
   useEffect(() => {
@@ -65,6 +67,7 @@ const CampaignList = () => {
       }
     } catch (error) {
       console.error("캠페인 수정 API 호출 중 오류 발생:", error);
+      setErrorMessages(["캠페인 상태 수정에 실패했습니다."]);
     }
   };
 
@@ -134,21 +137,25 @@ const CampaignList = () => {
     <>
       <Title> 캠페인 관리</Title>
       <Stack width={"100vw"} gap="5">
-        <CommonTable columns={columns} data={campaigns} />
-        {campaigns && (
-          <PaginationRoot
-            count={totalCount}
-            pageSize={pageSize}
-            page={page}
-            defaultPage={1}
-            onPageChange={(e) => setPage(e.page)}
-          >
-            <HStack wrap="wrap" justifyContent={"center"}>
-              <PaginationPrevTrigger />
-              <PaginationItems />
-              <PaginationNextTrigger />
-            </HStack>
-          </PaginationRoot>
+        {campaigns ? (
+          <>
+            <CommonTable columns={columns} data={campaigns} />
+            <PaginationRoot
+              count={totalCount}
+              pageSize={pageSize}
+              page={page}
+              defaultPage={1}
+              onPageChange={(e) => setPage(e.page)}
+            >
+              <HStack wrap="wrap" justifyContent={"center"}>
+                <PaginationPrevTrigger />
+                <PaginationItems />
+                <PaginationNextTrigger />
+              </HStack>
+            </PaginationRoot>
+          </>
+        ) : (
+          <h3>데이터가 없습니다.</h3>
         )}
       </Stack>
     </>

@@ -11,3 +11,8 @@ export const roleState = atom<string[]>({
   default: ["admin"],
   effects_UNSTABLE: [persistAtom],
 });
+
+export const errorState = atom<string[]>({
+  key: "errorState",
+  default: [],
+});

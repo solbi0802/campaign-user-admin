@@ -3,7 +3,8 @@ import { Button, Field, HStack, Stack, Input } from "@chakra-ui/react";
 import { fetchData } from "../../api";
 import Dialog from "../../components/common/Modal";
 import { useFormHook } from "../../hooks/useFormHook";
-
+import { useSetRecoilState } from "recoil";
+import { errorState } from "../../state";
 const UserUpdateModal = ({
   isOpen,
   onClose,
@@ -17,6 +18,7 @@ const UserUpdateModal = ({
 }) => {
   const { state, handleChange, validateForm, resetForm } = useFormHook();
   const [isSubmitting, setIsSubmitting] = useState(false); // 로딩 상태 추가
+  const setErrorMessages = useSetRecoilState(errorState);
 
   // 모달이 열릴 때 초기값 설정
   useEffect(() => {
@@ -52,6 +54,8 @@ const UserUpdateModal = ({
       }
     } catch (error) {
       console.error(error);
+      setErrorMessages(["사용자 정보를 업데이트 할 수 없습니다."]);
+      onClose();
     } finally {
       setIsSubmitting(false);
     }
@@ -60,7 +64,7 @@ const UserUpdateModal = ({
   return (
     <Dialog
       title={"사용자 저장"}
-      triggerChild={<Button colorPalette="blue">수정</Button>}
+      triggerChild={<></>}
       isOpen={isOpen} // 모달 상태 전달
       onClose={onClose} // 모달 닫기 핸들러 전달
       body={
@@ -90,10 +94,9 @@ const UserUpdateModal = ({
       footer={
         <>
           <Button
-            colorPalette="gray"
+            backgroundColor={"gray.400"}
             variant={"outline"}
             onClick={onClose}
-            color={"gray"}
           >
             취소
           </Button>

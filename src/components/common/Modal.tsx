@@ -19,6 +19,7 @@ interface DialogProps {
   footer?: ReactNode;
   isOpen: boolean;
   onClose: () => void;
+  role?: "dialog" | "alertdialog" | undefined;
 }
 
 const Modal = ({
@@ -30,6 +31,7 @@ const Modal = ({
   footer,
   isOpen,
   onClose,
+  role = "dialog",
 }: DialogProps) => {
   return (
     <DialogRoot
@@ -37,10 +39,11 @@ const Modal = ({
       placement={placement}
       open={isOpen}
       onOpenChange={(open) => !open && onClose()}
+      role={role}
     >
       <DialogTrigger asChild>{triggerChild}</DialogTrigger>
       <DialogContent backgroundColor={"white"} color={"black"}>
-        <DialogCloseTrigger color={"gray.500"} onClick={() => onClose()} />
+        <DialogCloseTrigger onClick={() => onClose()} />
         {title && (
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>

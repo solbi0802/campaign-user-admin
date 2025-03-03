@@ -21,17 +21,17 @@ const UserUpdateModal = ({
   // 모달이 열릴 때 초기값 설정
   useEffect(() => {
     if (isOpen && userInfo) {
+      resetForm();
       handleChange("userName", userInfo.name);
     }
-  }, [handleChange, isOpen, userInfo]);
+  }, [isOpen, userInfo?.name]);
 
   const handleSubmit = async () => {
     if (isSubmitting) return; // 중복 요청 방지
 
     setIsSubmitting(true);
     try {
-      const isValid = await validateForm();
-      console.log("isValid", isValid);
+      const isValid = await validateForm("update");
       if (!isValid) return; // 유효성 검사 실패 시 종료
 
       const requestBody: Record<string, unknown> = {
@@ -40,7 +40,7 @@ const UserUpdateModal = ({
       const res: { result: boolean; id: number } = await fetchData(
         `/api/users/${userInfo.id}`,
         {
-          method: "PUT",
+          method: "PATCH",
           body: JSON.stringify(requestBody),
           headers: { "Content-Type": "application/json" },
         }
@@ -48,12 +48,12 @@ const UserUpdateModal = ({
       if (res?.result) {
         onUserUpdated(); // 사용자 목록 갱신
         resetForm(); // 입력 필드 초기화
+        onClose();
       }
     } catch (error) {
       console.error(error);
     } finally {
       setIsSubmitting(false);
-      onClose();
     }
   };
 

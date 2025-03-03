@@ -21,7 +21,7 @@ const UserCreateModal = ({
 
     setIsSubmitting(true);
     try {
-      const isValid = await validateForm();
+      const isValid = await validateForm("create");
       if (!isValid) return; // 유효성 검사 실패 시 종료
       const requestBody = JSON.stringify({
         name: state.userName,
@@ -41,12 +41,12 @@ const UserCreateModal = ({
       if (res?.result) {
         onUserCreated(); // 사용자 목록 갱신
         resetForm(); // 입력 필드 초기화
+        onClose();
       }
     } catch (error) {
       console.error(error);
     } finally {
       setIsSubmitting(false);
-      onClose();
     }
   };
 

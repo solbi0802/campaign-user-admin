@@ -3,6 +3,8 @@ import { Button, Field, HStack, Stack, Input } from "@chakra-ui/react";
 import { fetchData } from "../../api";
 import Dialog from "../../components/common/Modal";
 import { useFormHook } from "../../hooks/useFormHook";
+import { errorState } from "../../state";
+import { useRecoilState } from "recoil";
 
 const UserUpdateModal = ({
   isOpen,
@@ -17,6 +19,7 @@ const UserUpdateModal = ({
 }) => {
   const { state, handleChange, validateForm, resetForm } = useFormHook();
   const [isSubmitting, setIsSubmitting] = useState(false); // 로딩 상태 추가
+  const [errorMessages, setErrorMessages] = useRecoilState(errorState); // Recoil 상태 사용
 
   // 모달이 열릴 때 초기값 설정
   useEffect(() => {
@@ -38,7 +41,7 @@ const UserUpdateModal = ({
         name: state.userName,
       };
       const res: { result: boolean; id: number } = await fetchData(
-        `/api/users/33`,
+        `/api/users/${userInfo.id}`,
         {
           method: "PATCH",
           body: JSON.stringify(requestBody),
@@ -51,8 +54,11 @@ const UserUpdateModal = ({
         onClose();
       }
     } catch (error) {
-      onClose();
-      console.error(error);
+      setErrorMessages((prev) => [
+        ...prev,
+        `사용자 정보를 업데이트할 수 없습니다`,
+      ]);
+      onClose(); // 모달 닫기
     } finally {
       setIsSubmitting(false);
     }

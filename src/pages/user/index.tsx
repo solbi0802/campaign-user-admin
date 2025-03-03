@@ -80,21 +80,25 @@ const UserList = () => {
         </Button>
       </HStack>
       <Stack width={"100vw"} gap="5" marginTop="8">
-        <CommonTable columns={columns} data={users} />
-        {users && (
-          <PaginationRoot
-            count={totalCount}
-            pageSize={pageSize}
-            page={page}
-            defaultPage={1}
-            onPageChange={(e) => setPage(e.page)}
-          >
-            <HStack wrap="wrap" justifyContent={"center"}>
-              <PaginationPrevTrigger />
-              <PaginationItems />
-              <PaginationNextTrigger />
-            </HStack>
-          </PaginationRoot>
+        {users ? (
+          <>
+            <CommonTable columns={columns} data={users} />
+            <PaginationRoot
+              count={totalCount}
+              pageSize={pageSize}
+              page={page}
+              defaultPage={1}
+              onPageChange={(e) => setPage(e.page)}
+            >
+              <HStack wrap="wrap" justifyContent={"center"}>
+                <PaginationPrevTrigger />
+                <PaginationItems />
+                <PaginationNextTrigger />
+              </HStack>
+            </PaginationRoot>
+          </>
+        ) : (
+          <h3>데이터가 없습니다.</h3>
         )}
       </Stack>
       {isCreateModalOpen && (

@@ -134,21 +134,25 @@ const CampaignList = () => {
     <>
       <Title> 캠페인 관리</Title>
       <Stack width={"100vw"} gap="5">
-        <CommonTable columns={columns} data={campaigns} />
-        {campaigns && (
-          <PaginationRoot
-            count={totalCount}
-            pageSize={pageSize}
-            page={page}
-            defaultPage={1}
-            onPageChange={(e) => setPage(e.page)}
-          >
-            <HStack wrap="wrap" justifyContent={"center"}>
-              <PaginationPrevTrigger />
-              <PaginationItems />
-              <PaginationNextTrigger />
-            </HStack>
-          </PaginationRoot>
+        {campaigns ? (
+          <>
+            <CommonTable columns={columns} data={campaigns} />
+            <PaginationRoot
+              count={totalCount}
+              pageSize={pageSize}
+              page={page}
+              defaultPage={1}
+              onPageChange={(e) => setPage(e.page)}
+            >
+              <HStack wrap="wrap" justifyContent={"center"}>
+                <PaginationPrevTrigger />
+                <PaginationItems />
+                <PaginationNextTrigger />
+              </HStack>
+            </PaginationRoot>
+          </>
+        ) : (
+          <h3>데이터가 없습니다.</h3>
         )}
       </Stack>
     </>

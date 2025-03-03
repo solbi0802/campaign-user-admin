@@ -40,7 +40,7 @@ const Modal = ({
     >
       <DialogTrigger asChild>{triggerChild}</DialogTrigger>
       <DialogContent backgroundColor={"white"} color={"black"}>
-        {/* <DialogCloseTrigger color={"gray.500"} /> */}
+        <DialogCloseTrigger color={"gray.500"} onClick={() => onClose()} />
         {title && (
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>

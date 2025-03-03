@@ -17,6 +17,8 @@ interface DialogProps {
   size?: "sm" | "md" | "lg" | "xl" | "xs" | "cover" | "full";
   placement?: "center" | "top" | "bottom";
   footer?: ReactNode;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 const Modal = ({
@@ -26,19 +28,26 @@ const Modal = ({
   size = "cover",
   placement = "center",
   footer,
+  isOpen,
+  onClose,
 }: DialogProps) => {
   return (
-    <DialogRoot size={size} placement={placement}>
+    <DialogRoot
+      size={size}
+      placement={placement}
+      open={isOpen}
+      onOpenChange={(open) => !open && onClose()}
+    >
       <DialogTrigger asChild>{triggerChild}</DialogTrigger>
-      <DialogContent>
-        <DialogCloseTrigger />
+      <DialogContent backgroundColor={"white"} color={"black"}>
+        <DialogCloseTrigger color={"gray.500"} onClick={() => onClose()} />
         {title && (
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
           </DialogHeader>
         )}
         <DialogBody pb="4">{body}</DialogBody>
-        <DialogFooter>{footer}</DialogFooter>
+        <DialogFooter justifyContent={"center"}>{footer}</DialogFooter>
       </DialogContent>
     </DialogRoot>
   );

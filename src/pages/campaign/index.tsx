@@ -9,8 +9,8 @@ import {
 } from "../../components/ui/pagination";
 import { formatNumberWithCommas, formatPercentage } from "../../utils";
 import Campaign from "../../types";
-import { roleState } from "../../state";
-import { useRecoilValue } from "recoil";
+import { errorState, roleState } from "../../state";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import CommonTable from "../../components/common/CommonTable";
 import { Title } from "../../styles/CommonStyle";
 
@@ -28,6 +28,7 @@ const CampaignList = () => {
   const [campaigns, setCampaigns] = useState<Campaign[]>([]);
   const [totalCount, setTotalCount] = useState(0);
   const [page, setPage] = useState(1);
+  const setErrorMessages = useSetRecoilState(errorState);
   const role = useRecoilValue(roleState);
 
   const getCampaignList = async (page: number) => {
@@ -37,6 +38,7 @@ const CampaignList = () => {
       setTotalCount(res.size);
     } catch (error) {
       console.error(error);
+      setErrorMessages(["캠페인 리스트 불러오기를 실패했습니다."]);
     }
   };
   useEffect(() => {

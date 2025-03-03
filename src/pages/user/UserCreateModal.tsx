@@ -44,6 +44,7 @@ const UserCreateModal = ({
         onClose();
       }
     } catch (error) {
+      onClose();
       console.error(error);
     } finally {
       setIsSubmitting(false);
@@ -115,12 +116,7 @@ const UserCreateModal = ({
       }
       footer={
         <>
-          <Button
-            colorPalette="gray"
-            variant={"outline"}
-            onClick={onClose}
-            color={"gray"}
-          >
+          <Button variant={"outline"} onClick={onClose}>
             취소
           </Button>
           <Button

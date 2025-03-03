@@ -38,7 +38,7 @@ const UserUpdateModal = ({
         name: state.userName,
       };
       const res: { result: boolean; id: number } = await fetchData(
-        `/api/users/${userInfo.id}`,
+        `/api/users/33`,
         {
           method: "PATCH",
           body: JSON.stringify(requestBody),
@@ -51,6 +51,7 @@ const UserUpdateModal = ({
         onClose();
       }
     } catch (error) {
+      onClose();
       console.error(error);
     } finally {
       setIsSubmitting(false);
@@ -60,7 +61,7 @@ const UserUpdateModal = ({
   return (
     <Dialog
       title={"사용자 저장"}
-      triggerChild={<Button colorPalette="blue">수정</Button>}
+      triggerChild={<></>}
       isOpen={isOpen} // 모달 상태 전달
       onClose={onClose} // 모달 닫기 핸들러 전달
       body={
@@ -89,12 +90,7 @@ const UserUpdateModal = ({
       }
       footer={
         <>
-          <Button
-            colorPalette="gray"
-            variant={"outline"}
-            onClick={onClose}
-            color={"gray"}
-          >
+          <Button colorPalette="gray" variant={"outline"} onClick={onClose}>
             취소
           </Button>
           <Button

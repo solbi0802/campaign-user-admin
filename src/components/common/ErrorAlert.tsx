@@ -8,6 +8,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { CloseButton } from "@chakra-ui/react";
+import { useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
 const ErrorAlert = () => {
@@ -17,6 +18,17 @@ const ErrorAlert = () => {
   const handleClose = () => {
     setErrorMessages([]); // 에러 메시지 초기화
   };
+
+  // 5초 후에 자동으로 알림 닫기
+  useEffect(() => {
+    if (errorMessages.length > 0) {
+      const timer = setTimeout(() => {
+        handleClose();
+      }, 5000);
+
+      return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머를 정리
+    }
+  }, [errorMessages, setErrorMessages]);
 
   if (errorMessages.length === 0) return null;
 

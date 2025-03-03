@@ -40,7 +40,7 @@ const UserUpdateModal = ({
         name: state.userName,
       };
       const res: { result: boolean; id: number } = await fetchData(
-        `/api/users/333`,
+        `/api/users/${userInfo.id}`,
         {
           method: "PATCH",
           body: JSON.stringify(requestBody),

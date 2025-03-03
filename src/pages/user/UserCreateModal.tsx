@@ -4,6 +4,8 @@ import { fetchData } from "../../api";
 import Dialog from "../../components/common/Modal";
 import { useFormHook } from "../../hooks/useFormHook";
 import { PasswordInput } from "../../components/ui/password-input";
+import { errorState } from "../../state";
+import { useSetRecoilState } from "recoil";
 const UserCreateModal = ({
   isOpen,
   onClose,
@@ -15,6 +17,7 @@ const UserCreateModal = ({
 }) => {
   const { state, handleChange, validateForm, resetForm } = useFormHook();
   const [isSubmitting, setIsSubmitting] = useState(false); // 로딩 상태 추가
+  const setErrorMessages = useSetRecoilState(errorState);
 
   const handleSubmit = async () => {
     if (isSubmitting) return; // 중복 요청 방지
@@ -46,6 +49,7 @@ const UserCreateModal = ({
     } catch (error) {
       onClose();
       console.error(error);
+      setErrorMessages(["사용자 생성에 실패했습니다."]);
     } finally {
       setIsSubmitting(false);
     }

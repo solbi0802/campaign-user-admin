@@ -67,6 +67,7 @@ const CampaignList = () => {
       }
     } catch (error) {
       console.error("캠페인 수정 API 호출 중 오류 발생:", error);
+      setErrorMessages(["캠페인 상태 수정에 실패했습니다."]);
     }
   };
 

@@ -13,6 +13,8 @@ import {
 import { Title } from "../../styles/CommonStyle";
 import UserCreateModal from "./UserCreateModal";
 import UserUpdateModal from "./UserUpdateModal";
+import { errorState } from "../../state";
+import { useSetRecoilState } from "recoil";
 
 interface UserInfo {
   id: number;
@@ -27,6 +29,7 @@ const UserList = () => {
   const [isCreateModalOpen, setCreateModalOpen] = useState(false); // 생성 모달 열기 상태
   const [isUpdateModalOpen, setUpdateModalOpen] = useState(false); // 수정 모달 열기 상태
   const [selectedUser, setSelecteduser] = useState<UserInfo>();
+  const setErrorMessages = useSetRecoilState(errorState);
 
   const getUserList = async (page: number) => {
     try {
@@ -35,6 +38,7 @@ const UserList = () => {
       setTotalCount(res.size);
     } catch (error) {
       console.error(error);
+      setErrorMessages(["사용자 리스트 불러오기에 실패했습니다."]);
     }
   };
   const handleEditClick = (userInfo: UserInfo) => {

@@ -20,12 +20,13 @@ import { useEffect, useState } from "react";
 import { fetchData } from "../api";
 import User from "../types/index";
 import styled from "@emotion/styled";
-import { roleState } from "../state";
-import { useRecoilState } from "recoil";
+import { errorState, roleState } from "../state";
+import { useRecoilState, useSetRecoilState } from "recoil";
 
 const Navbar = () => {
   const [user, setUser] = useState<User>();
   const [role, setRole] = useRecoilState(roleState);
+  const setErrorMessages = useSetRecoilState(errorState);
 
   const getMyInfo = async () => {
     try {
@@ -33,6 +34,7 @@ const Navbar = () => {
       setUser(res as User);
     } catch (error) {
       console.error(error);
+      setErrorMessages(["내정보를 불러올 수 없습니다."]);
     }
   };
 

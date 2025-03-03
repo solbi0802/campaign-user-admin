@@ -74,34 +74,31 @@ export const useFormHook = () => {
     [state.password] // password는 confirmPassword의 검증에 사용되므로 의존성에 추가
   );
 
-  const validateForm = async () => {
-    const [emailError, passwordError, confirmPasswordError, userNameError] =
-      await Promise.all([
-        validateEmail(state.email),
-        // 동기 함수는 Promise로 감싸기
-        Promise.resolve(validatePassword(state.password)),
-        Promise.resolve(
-          validateConfirmPassword(state.password, state.confirmPassword)
-        ),
-        Promise.resolve(validateUserName(state.userName)),
-      ]);
-    const errors: Partial<typeof initialState> = {
-      emailError,
-      passwordError,
-      confirmPasswordError,
-      userNameError,
-    };
+  const validateForm = async (mode: "create" | "update") => {
+    const errors: Partial<typeof initialState> = {};
+
+    if (mode === "create") {
+      errors.emailError = await validateEmail(state.email);
+      errors.passwordError = validatePassword(state.password);
+      errors.confirmPasswordError = validateConfirmPassword(
+        state.password,
+        state.confirmPassword
+      );
+    }
+
+    errors.userNameError = validateUserName(state.userName);
+
     dispatch({ type: "SET_ERRORS", payload: errors });
 
     return !Object.values(errors).some((error) => error !== "");
   };
 
   // 폼 초기화
-  const resetForm = () => {
+  const resetForm = useCallback(() => {
     dispatch({
       type: "RESET_FORM",
     });
-  };
+  }, []);
 
   return { state, handleChange, validateForm, resetForm };
 };

@@ -11,14 +11,22 @@ import {
   PaginationRoot,
 } from "../../components/ui/pagination";
 import { Title } from "../../styles/CommonStyle";
-import UserModal from "./UserModal";
 import UserCreateModal from "./UserCreateModal";
+import UserUpdateModal from "./UserUpdateModal";
+
+interface UserInfo {
+  id: number;
+  email: string;
+  name: string;
+}
 
 const UserList = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [isCreateModalOpen, setCreateModalOpen] = useState(false); // 생성 모달 열기 상태
+  const [isUpdateModalOpen, setUpdateModalOpen] = useState(false); // 수정 모달 열기 상태
+  const [selectedUser, setSelecteduser] = useState<UserInfo>();
 
   const getUserList = async (page: number) => {
     try {
@@ -28,6 +36,10 @@ const UserList = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+  const handleEditClick = (userInfo: UserInfo) => {
+    setSelecteduser(userInfo);
+    setUpdateModalOpen(true); // 수정 모달 열기
   };
 
   useEffect(() => {
@@ -48,7 +60,9 @@ const UserList = () => {
       renderCell: (item: any) => (
         <Button
           colorPalette="blue"
-          onClick={() => console.log("TODO:수정 모달")}
+          onClick={() =>
+            handleEditClick({ id: item.id, email: item.email, name: item.name })
+          }
         >
           수정
         </Button>
@@ -83,11 +97,24 @@ const UserList = () => {
           </PaginationRoot>
         )}
       </Stack>
-      <UserCreateModal
-        isOpen={isCreateModalOpen}
-        onClose={() => setCreateModalOpen(false)}
-        onUserCreated={() => getUserList(page)}
-      />
+      {isCreateModalOpen && (
+        <UserCreateModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setCreateModalOpen(false)}
+          onUserCreated={() => getUserList(page)}
+        />
+      )}
+
+      {selectedUser && (
+        <>
+          <UserUpdateModal
+            isOpen={isUpdateModalOpen}
+            onClose={() => setUpdateModalOpen(false)}
+            onUserUpdated={() => getUserList(page)}
+            userInfo={selectedUser}
+          />
+        </>
+      )}
     </>
   );
 };

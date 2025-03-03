@@ -5,6 +5,7 @@ import {
   validateUserName,
 } from "../utils";
 import { useReducer, useCallback } from "react";
+
 const initialState = {
   email: "",
   emailError: "",
@@ -17,13 +18,13 @@ const initialState = {
 };
 
 // reducer 함수
-const formReducer = (
-  state: typeof initialState,
-  action: {
-    type: string;
-    payload: { field: string; value?: string; error?: string };
-  }
-) => {
+type Action =
+  | { type: "SET_FIELD"; payload: { field: string; value: string } }
+  | { type: "SET_ERROR"; payload: { field: string; error: string } }
+  | { type: "SET_ERRORS"; payload: Partial<typeof initialState> }
+  | { type: "RESET_FORM" };
+
+const formReducer = (state: typeof initialState, action: Action) => {
   switch (action.type) {
     case "SET_FIELD":
       return { ...state, [action.payload.field]: action.payload.value };
@@ -32,6 +33,10 @@ const formReducer = (
         ...state,
         [`${action.payload.field}Error`]: action.payload.error,
       };
+    case "SET_ERRORS":
+      return { ...state, ...action.payload };
+    case "RESET_FORM":
+      return initialState;
     default:
       return state;
   }
@@ -48,38 +53,55 @@ export const useFormHook = () => {
       switch (field) {
         case "email":
           errorMessage = await validateEmail(value);
-          dispatch({
-            type: "SET_ERROR",
-            payload: { field, error: errorMessage },
-          });
           break;
         case "password":
           errorMessage = validatePassword(value);
-          dispatch({
-            type: "SET_ERROR",
-            payload: { field, error: errorMessage },
-          });
           break;
         case "confirmPassword":
           errorMessage = validateConfirmPassword(state.password, value);
-          dispatch({
-            type: "SET_ERROR",
-            payload: { field, error: errorMessage },
-          });
           break;
         case "userName":
           errorMessage = validateUserName(value);
-          dispatch({
-            type: "SET_ERROR",
-            payload: { field, error: errorMessage },
-          });
           break;
         default:
           break;
       }
+      dispatch({
+        type: "SET_ERROR",
+        payload: { field, error: errorMessage },
+      });
     },
     [state.password] // password는 confirmPassword의 검증에 사용되므로 의존성에 추가
   );
 
-  return { state, handleChange };
+  const validateForm = async () => {
+    const [emailError, passwordError, confirmPasswordError, userNameError] =
+      await Promise.all([
+        validateEmail(state.email),
+        // 동기 함수는 Promise로 감싸기
+        Promise.resolve(validatePassword(state.password)),
+        Promise.resolve(
+          validateConfirmPassword(state.password, state.confirmPassword)
+        ),
+        Promise.resolve(validateUserName(state.userName)),
+      ]);
+    const errors: Partial<typeof initialState> = {
+      emailError,
+      passwordError,
+      confirmPasswordError,
+      userNameError,
+    };
+    dispatch({ type: "SET_ERRORS", payload: errors });
+
+    return !Object.values(errors).some((error) => error !== "");
+  };
+
+  // 폼 초기화
+  const resetForm = () => {
+    dispatch({
+      type: "RESET_FORM",
+    });
+  };
+
+  return { state, handleChange, validateForm, resetForm };
 };

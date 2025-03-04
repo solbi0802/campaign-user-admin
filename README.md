@@ -55,7 +55,7 @@
    - 공통 함수 정리: `utils/`에 숫자 포맷팅, 날짜 변환 등 유틸 함수 관리
 
 ### ✅ MSW(Mock Service Worker)로 API Mocking 설정
-  - `mocks/handler`에서 사용자/캠페인 API 모킹
+  - `mocks/handler`에서 사용자,캠페인 화면에 필요한 API 모킹
   -  `main.ts`에서 worker.start()를 실행해 개발 환경에서 MSW를 활성화
   - fetch 요청 시 실제 API 호출 없이도 데이터 응답을 받아 UI 개발이 가능하게 함
 
